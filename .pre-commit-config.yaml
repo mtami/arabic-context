@@ -1,0 +1,39 @@
+default_language_version:
+    python: python3
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-executables-have-shebangs
+      - id: debug-statements
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        args:
+        - "--exclude=*venv/,*migrations*"
+        - "--ignore=W503,W504,W601,F401,F403"
+        - "--max-line-length=120"
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        name: isort (python)
+        args: ["--profile", "black"]
+
+  - repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+      - id: black
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.2.3
+    hooks:
+      - id: pyupgrade
+        args: [ "--py36-plus", "--py37-plus", "--py38-plus", "--py39-plus" ]
