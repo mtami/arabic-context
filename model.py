@@ -25,18 +25,19 @@ def load_model():
     return model
 
 
-@st.experimental_memo
-def build_nlp_words():
-    model = load_model()
-    nlp_words = [model(word) for word in load_words()]
-    return nlp_words
-
-
 def scale_val(val, max_val=1, scale=1000):
     return val / abs(max_val) * scale
 
 
 nlp = load_model()
+
+
+@st.experimental_memo
+def build_nlp_words():
+    nlp_words = [nlp(word) for word in load_words()]
+    return nlp_words
+
+
 nlp_words = build_nlp_words()
 
 
