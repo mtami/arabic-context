@@ -78,7 +78,7 @@ def main():
 
     game_title = st.title("Guess the Word of Today")
     game_info = st.subheader(
-        f"Day: #{game+1}  GUESSES: {st.session_state.lookup[game]['guess']}"
+        f"Day: #{game+1}  Guess: #{st.session_state.lookup[game]['guess']}"
     )
     user_query = st.text_input(
         "Guess",
@@ -97,6 +97,9 @@ def main():
                 st.error("Something went wrong!", icon="🚨")
                 print(e)
 
+    # sort words non-descending according to score
+    st.session_state.lookup[game]["query_history"] = sorted(st.session_state.lookup[game]["query_history"],
+                                                            key=lambda query: query.get('distance', float('inf')))
     for query in st.session_state.lookup[game]["query_history"]:
         if "distance" in query.keys():
             word = query["word"]
