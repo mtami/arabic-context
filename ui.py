@@ -65,6 +65,9 @@ def main():
             else:
                 st.error(data["detail"], icon="🤖")
 
+        # reset user input
+        # st.session_state["user_query"] = ""
+
     if "game" not in st.session_state:
         st.session_state.game = (today - day_one).days
 
@@ -80,22 +83,38 @@ def main():
     game_info = st.subheader(
         f"Day: #{game+1}  Guess: #{st.session_state.lookup[game]['guess']}"
     )
+
+    st.markdown("""
+    <style>
+    input[aria-label="Guess"] {
+      unicode-bidi:bidi-override;
+      direction: RTL;
+    }
+    </style>
+        """, unsafe_allow_html=True)
+
+    def clear_text():
+        st.session_state.prev_user_query = st.session_state.user_query
+        st.session_state.user_query = ""
+
     user_query = st.text_input(
         "Guess",
         placeholder="type a word",
         key="user_query",
         label_visibility="collapsed",
         disabled=getattr(st.session_state, "user_query_disabled", False),
+        on_change=clear_text,
     )
 
-    if st.session_state.user_query:
+    if getattr(st.session_state, "prev_user_query", ""):
         with st.spinner("Wait for it..."):
             time.sleep(1)
-            try:
-                update_state(user_query)
-            except Exception as e:
-                st.error("Something went wrong!", icon="🚨")
-                print(e)
+
+        try:
+            update_state(getattr(st.session_state, "prev_user_query", ""))
+        except Exception as e:
+            st.error("Something went wrong!", icon="🚨")
+            print(e)
 
     # sort words non-descending according to score
     st.session_state.lookup[game]["query_history"] = sorted(st.session_state.lookup[game]["query_history"],
