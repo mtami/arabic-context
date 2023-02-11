@@ -97,15 +97,19 @@ def main():
         st.session_state.prev_user_query = st.session_state.user_query
         st.session_state.user_query = ""
 
-    user_query = st.text_input(
-        "Guess",
-        placeholder="type a word",
-        key="user_query",
-        label_visibility="collapsed",
-        disabled=getattr(st.session_state, "user_query_disabled", False),
-        on_change=clear_text,
-    )
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        user_query = st.text_input(
+            "Guess",
+            placeholder="type a word",
+            key="user_query",
+            label_visibility="collapsed",
+            disabled=getattr(st.session_state, "user_query_disabled", False),
+            on_change=clear_text,
+        )
 
+    with col2:
+        submit = st.button("calculate")
     if getattr(st.session_state, "prev_user_query", ""):
         with st.spinner("Wait for it..."):
             time.sleep(1)
